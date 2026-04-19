@@ -1,0 +1,54 @@
+# Vercel Deployment Configuration
+# See https://vercel.com/docs/projects/project-configuration
+
+## Ignored files and directories
+# Docker files (local development only)
+docker-compose.yml
+Dockerfile
+.dockerignore
+
+# Local environment files
+.env.local
+.env.*.local
+
+# Development files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Build outputs
+dist/
+build/
+.turbo/
+
+# Large dependencies (will be installed fresh on Vercel)
+node_modules/
+
+# Optional: Local database files
+*.db
+*.sqlite
+
+# Documentation (optional, saves build time)
+# docs/
+# README.md
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# OS files
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db

@@ -1,0 +1,37 @@
+{
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm ci",
+  "framework": "nextjs",
+  "nodeVersion": "20.x",
+  "env": {
+    "DATABASE_URL": {
+      "description": "PostgreSQL connection string (required for deployment)"
+    },
+    "AUTH_SECRET": {
+      "description": "NextAuth secret key (generate with: node -e \"console.log(require('crypto').randomBytes(32).toString('hex'))\")"
+    },
+    "AUTH_URL": {
+      "description": "Production URL for authentication (e.g., https://yourdomain.com)"
+    },
+    "NEXT_PUBLIC_APP_URL": {
+      "description": "Public app URL"
+    },
+    "NEXT_PUBLIC_APP_NAME": {
+      "description": "Application name"
+    }
+  },
+  "functions": {
+    "app/api/**": {
+      "memory": 1024,
+      "maxDuration": 60
+    }
+  },
+  "outputDirectory": ".next",
+  "publicSource": "./public",
+  "git": {
+    "deploymentEnabled": {
+      "main": true
+    }
+  }
+}
