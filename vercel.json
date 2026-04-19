@@ -27,7 +27,6 @@
     }
   },
   "outputDirectory": ".next",
-  "publicSource": "./public",
   "git": {
     "deploymentEnabled": {
       "main": true
