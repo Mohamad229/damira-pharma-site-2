@@ -1,0 +1,48 @@
+name: Deploy Template
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    env:
+      NODE_ENV: production
+      DATABASE_URL: ${{ secrets.PROD_DATABASE_URL }}
+      AUTH_SECRET: ${{ secrets.PROD_AUTH_SECRET }}
+      AUTH_URL: ${{ secrets.PROD_AUTH_URL }}
+      NEXT_PUBLIC_APP_URL: ${{ secrets.PROD_NEXT_PUBLIC_APP_URL }}
+      STORAGE_PROVIDER: ${{ secrets.PROD_STORAGE_PROVIDER }}
+      S3_BUCKET: ${{ secrets.PROD_S3_BUCKET }}
+      S3_REGION: ${{ secrets.PROD_S3_REGION }}
+      S3_ACCESS_KEY: ${{ secrets.PROD_S3_ACCESS_KEY }}
+      S3_SECRET_KEY: ${{ secrets.PROD_S3_SECRET_KEY }}
+      S3_ENDPOINT: ${{ secrets.PROD_S3_ENDPOINT }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+      - name: Apply Prisma migrations
+        run: npx prisma migrate deploy
+
+      - name: Deploy (replace with hosting command)
+        run: |
+          echo "Replace this step with your deployment command"
