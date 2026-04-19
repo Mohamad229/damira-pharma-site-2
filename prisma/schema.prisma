@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider   = "prisma-client-js"
   engineType = "binary"
 }
 
@@ -12,15 +12,15 @@ datasource db {
 
 // User & Authentication
 model User {
-  id            String    @id @default(cuid())
-  email         String    @unique
-  password      String
-  name          String
-  role          UserRole  @default(INTERNAL_USER)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  
-  media         Media[]
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      UserRole @default(INTERNAL_USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  media Media[]
 }
 
 enum UserRole {
@@ -30,28 +30,28 @@ enum UserRole {
 
 // Products
 model Product {
-  id                String                  @id @default(cuid())
-  slug              String                  @unique
-  coverImage        String?
-  type              ProductType             @default(SIMPLE)
-  status            ProductStatus           @default(AVAILABLE)
-  isPublished       Boolean                 @default(false)
-  
-  categoryId        String?
-  category          Category?               @relation(fields: [categoryId], references: [id])
-  
+  id          String        @id @default(cuid())
+  slug        String        @unique
+  coverImage  String?
+  type        ProductType   @default(SIMPLE)
+  status      ProductStatus @default(AVAILABLE)
+  isPublished Boolean       @default(false)
+
+  categoryId String?
+  category   Category? @relation(fields: [categoryId], references: [id])
+
   therapeuticAreaId String?
-  therapeuticArea   TherapeuticArea?        @relation(fields: [therapeuticAreaId], references: [id])
-  
-  manufacturerId    String?
-  manufacturer      Manufacturer?           @relation(fields: [manufacturerId], references: [id])
-  
-  translations      ProductTranslation[]
-  advancedDetails   ProductAdvancedDetails?
-  attachments       ProductAttachment[]
-  
-  createdAt         DateTime                @default(now())
-  updatedAt         DateTime                @updatedAt
+  therapeuticArea   TherapeuticArea? @relation(fields: [therapeuticAreaId], references: [id])
+
+  manufacturerId String?
+  manufacturer   Manufacturer? @relation(fields: [manufacturerId], references: [id])
+
+  translations    ProductTranslation[]
+  advancedDetails ProductAdvancedDetails?
+  attachments     ProductAttachment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum ProductType {
@@ -65,15 +65,15 @@ enum ProductStatus {
 }
 
 model ProductTranslation {
-  id               String   @id @default(cuid())
-  locale           String   // 'en' or 'ar'
+  id               String  @id @default(cuid())
+  locale           String // 'en' or 'ar'
   name             String
   shortDescription String?
-  fullDescription  String?  @db.Text
-  
-  productId        String
-  product          Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  
+  fullDescription  String? @db.Text
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
   @@unique([productId, locale])
 }
 
@@ -81,21 +81,21 @@ model ProductAdvancedDetails {
   id                String  @id @default(cuid())
   storageConditions String?
   regulatoryInfo    String? @db.Text
-  
-  productId         String  @unique
-  product           Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  productId String  @unique
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
 model ProductAttachment {
-  id        String   @id @default(cuid())
-  name      String
-  url       String
-  type      String   // 'pdf', 'doc', etc.
-  size      Int?
-  
+  id   String @id @default(cuid())
+  name String
+  url  String
+  type String // 'pdf', 'doc', etc.
+  size Int?
+
   productId String
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
   createdAt DateTime @default(now())
 }
 
@@ -103,16 +103,16 @@ model ProductAttachment {
 model Category {
   id       String    @id @default(cuid())
   slug     String    @unique
-  name     String    // English name
-  nameAr   String?   // Arabic name
+  name     String // English name
+  nameAr   String? // Arabic name
   products Product[]
 }
 
 model TherapeuticArea {
   id       String    @id @default(cuid())
   slug     String    @unique
-  name     String    // English name
-  nameAr   String?   // Arabic name
+  name     String // English name
+  nameAr   String? // Arabic name
   products Product[]
 }
 
@@ -126,43 +126,43 @@ model Manufacturer {
 
 // Pages & Content
 model Page {
-  id           String            @id @default(cuid())
-  slug         String            @unique
-  isPublished  Boolean           @default(false)
-  
+  id          String  @id @default(cuid())
+  slug        String  @unique
+  isPublished Boolean @default(false)
+
   translations PageTranslation[]
   sections     PageSection[]
-  
-  createdAt    DateTime          @default(now())
-  updatedAt    DateTime          @updatedAt
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model PageTranslation {
   id              String  @id @default(cuid())
-  locale          String  // 'en' or 'ar'
+  locale          String // 'en' or 'ar'
   title           String
   metaTitle       String?
   metaDescription String?
-  
-  pageId          String
-  page            Page    @relation(fields: [pageId], references: [id], onDelete: Cascade)
-  
+
+  pageId String
+  page   Page   @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
   @@unique([pageId, locale])
 }
 
 model PageSection {
-  id           String                   @id @default(cuid())
-  type         SectionType
-  order        Int
-  data         Json?                    // Flexible JSON for section-specific data
-  
-  pageId       String
-  page         Page                     @relation(fields: [pageId], references: [id], onDelete: Cascade)
-  
+  id    String      @id @default(cuid())
+  type  SectionType
+  order Int
+  data  Json? // Flexible JSON for section-specific data
+
+  pageId String
+  page   Page   @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
   translations PageSectionTranslation[]
-  
-  createdAt    DateTime                 @default(now())
-  updatedAt    DateTime                 @updatedAt
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum SectionType {
@@ -176,49 +176,49 @@ enum SectionType {
 }
 
 model PageSectionTranslation {
-  id        String      @id @default(cuid())
-  locale    String      // 'en' or 'ar'
-  content   Json        // Translated content as JSON
-  
+  id      String @id @default(cuid())
+  locale  String // 'en' or 'ar'
+  content Json // Translated content as JSON
+
   sectionId String
   section   PageSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
-  
+
   @@unique([sectionId, locale])
 }
 
 // Media Library
 model Media {
-  id        String   @id @default(cuid())
-  name      String
-  url       String
-  type      String   // 'image', 'document', etc.
-  mimeType  String
-  size      Int
-  width     Int?     // For images
-  height    Int?     // For images
-  
+  id       String @id @default(cuid())
+  name     String
+  url      String
+  type     String // 'image', 'document', etc.
+  mimeType String
+  size     Int
+  width    Int? // For images
+  height   Int? // For images
+
   uploadedById String?
   uploadedBy   User?   @relation(fields: [uploadedById], references: [id])
-  
+
   createdAt DateTime @default(now())
 }
 
 // Form Submissions
 model FormSubmission {
-  id          String           @id @default(cuid())
-  type        FormType
-  status      SubmissionStatus @default(NEW)
-  
+  id     String           @id @default(cuid())
+  type   FormType
+  status SubmissionStatus @default(NEW)
+
   name        String
   email       String
   phone       String?
   company     String?
   inquiryType String?
-  message     String           @db.Text
-  productId   String?          // Optional reference to a product
-  
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt
+  message     String  @db.Text
+  productId   String? // Optional reference to a product
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum FormType {
@@ -236,55 +236,55 @@ enum SubmissionStatus {
 // Structured Page Content (v2 - New System)
 // Replaces dynamic PageSection system with fixed page structures
 model PageContent {
-  id              String   @id @default(cuid())
-  pageKey         String   // "home", "about", "services", etc.
-  locale          String   // "en" or "ar"
-  
+  id      String @id @default(cuid())
+  pageKey String // "home", "about", "services", etc.
+  locale  String // "en" or "ar"
+
   // Metadata
   title           String
   metaTitle       String?
   metaDescription String?
-  
+
   // Relationships
-  sections        PageContentSection[]
-  
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  
+  sections PageContentSection[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@unique([pageKey, locale])
   @@index([pageKey])
 }
 
 model PageContentSection {
-  id              String   @id @default(cuid())
-  contentId       String
-  content         PageContent @relation(fields: [contentId], references: [id], onDelete: Cascade)
-  
-  sectionKey      String   // "hero", "trustMetrics", "capabilities", etc.
-  order           Int      // Rendering order (1, 2, 3...)
-  
+  id        String      @id @default(cuid())
+  contentId String
+  content   PageContent @relation(fields: [contentId], references: [id], onDelete: Cascade)
+
+  sectionKey String // "hero", "trustMetrics", "capabilities", etc.
+  order      Int // Rendering order (1, 2, 3...)
+
   // Field storage
-  fields          PageContentField[]
-  
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  
+  fields PageContentField[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@unique([contentId, sectionKey])
   @@index([contentId])
 }
 
 model PageContentField {
-  id              String   @id @default(cuid())
-  sectionId       String
-  section         PageContentSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
-  
-  fieldKey        String   // "title", "subtitle", "description", etc.
-  fieldType       String   // "text", "textarea", "json", "number", "boolean"
-  value           String?  @db.Text  // Serialized value
-  
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  
+  id        String             @id @default(cuid())
+  sectionId String
+  section   PageContentSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+
+  fieldKey  String // "title", "subtitle", "description", etc.
+  fieldType String // "text", "textarea", "json", "number", "boolean"
+  value     String? @db.Text // Serialized value
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@unique([sectionId, fieldKey])
   @@index([sectionId])
 }
